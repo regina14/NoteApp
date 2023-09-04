@@ -1,6 +1,5 @@
-package com.example.noteapp.data.NoteDatabaseDao
+package com.example.noteapp.data
 
-import androidx.compose.runtime.MutableState
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -15,8 +14,8 @@ interface NoteDatabaseDao {
     @Query("SELECT * from notes_tbl")
     fun getNotes(): Flow<List<Note>>
 
-    @Query("SELECT * from notes_tbl where id = :id")
-    suspend fun getNoteById(id: String)
+    @Query("SELECT * from notes_tbl where id =:id")
+    suspend fun getNoteById(id: String): Note
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(note: Note)
