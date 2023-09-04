@@ -1,5 +1,6 @@
 package com.example.noteapp.data.NoteDatabaseDao
 
+import androidx.compose.runtime.MutableState
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -7,11 +8,12 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.noteapp.model.Note
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NoteDatabaseDao {
     @Query("SELECT * from notes_tbl")
-    fun getNotes(): List<Note>
+    fun getNotes(): Flow<List<Note>>
 
     @Query("SELECT * from notes_tbl where id = :id")
     suspend fun getNoteById(id: String)
