@@ -24,10 +24,15 @@ import androidx.compose.ui.unit.dp
 import com.example.noteapp.R
 import com.example.noteapp.components.NoteButton
 import com.example.noteapp.components.NoteInputText
+import com.example.noteapp.model.Note
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NoteScreen() {
+fun NoteScreen(
+    notes: List<Note>,
+    onAddNote: (Note) -> Unit,
+    onRemoveNote: (Note) -> Unit
+) {
     var title by remember {
         mutableStateOf("")
     }
@@ -51,8 +56,7 @@ fun NoteScreen() {
                 text = title,
                 label = "Title",
                 onTextChange = {
-                    if (it.all {
-                        char ->
+                    if (it.all { char ->
                             char.isLetter() || char.isWhitespace()
                         }) title = it
                 })
@@ -61,12 +65,17 @@ fun NoteScreen() {
                 text = description,
                 label = "Add a note",
                 onTextChange = {
-                    if (it.all {
-                                char ->
+                    if (it.all { char ->
                             char.isLetter() || char.isWhitespace()
                         }) description = it
                 })
-            NoteButton(text = "Save", onClick = {})
+            NoteButton(text = "Save", onClick = {
+                if (title.isNotEmpty() && description.isNotEmpty()) {
+                    // save/add to the list
+                    title = ""
+                    description = ""
+                }
+            })
         }
     }
 
@@ -77,5 +86,5 @@ fun NoteScreen() {
 @Preview(showBackground = true)
 @Composable
 fun NoteScreenPreview() {
-    NoteScreen()
+    NoteScreen(notes = emptyList(), onAddNote = {}, onRemoveNote = {})
 }
