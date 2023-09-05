@@ -1,6 +1,7 @@
 package com.example.noteapp
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -9,8 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val noteViewModel = viewModel<NoteViewModel>()
-                    NotesApp(noteViewModel = noteViewModel)
+                    NotesApp(noteViewModel)
                 }
             }
         }
@@ -40,26 +40,20 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun NotesApp(noteViewModel: NoteViewModel = viewModel()) {
-    NoteScreen(notes = noteViewModel.getAllNotes(), onAddNote = {
-        noteViewModel.addNote(it)
-    }, onRemoveNote = {
-        noteViewModel.removeNote(it)
-    })
-}
+fun NotesApp(noteViewModel: NoteViewModel) {
+    val notesList = noteViewModel.noteList.collectAsState().value
+    //val notesList = noteViewModel.getAllNotes()
+    Log.d("" ,"noteslist: ${notesList}")
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+    NoteScreen(notes = notesList,
+        onRemoveNote = { noteViewModel.removeNote(it) },
+        onAddNote = { noteViewModel.addNote(it) })
+
 }
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     NoteAppTheme {
-        Greeting("Android")
     }
 }

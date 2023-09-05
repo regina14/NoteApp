@@ -12,7 +12,8 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface NoteDatabaseDao {
     @Query("SELECT * from notes_tbl")
-    fun getNotes(): Flow<List<Note>>
+    fun getNotes():
+            Flow<List<Note>>
 
     @Query("SELECT * from notes_tbl where id =:id")
     suspend fun getNoteById(id: String): Note
@@ -27,5 +28,5 @@ interface NoteDatabaseDao {
     suspend fun deleteAll()
 
     @Delete
-    suspend fun delete(note: Note)
+    suspend fun deleteNote(note: Note)
 }
